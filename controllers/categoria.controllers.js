@@ -5,24 +5,27 @@ const pool = new Pool({
     user: 'prestamos_jostyn',
     password: 'RPaKREWkgrLVSXXx5trvvY8thR6Gn383',
     database: 'prestamos_jostyn',
-    port: '5432'
+    port: '5432',
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 //Obtener todas las ubicaciones
 async function getCategorias(req, res) {
     const query = 'SELECT * FROM categoria';
     try {
-        const client = await pool.connect();
-        const result = await client.query(query);
-        client.release();
+        const result = await pool.query(query);
         if (result.rowCount > 0) {
             res.json(result.rows);
         } else {
-            res.status(400).json({ message: 'No se encontraron los datos!' })
+            res.status(404).json({ message: 'No se encontraron los datos!' });
         }
     } catch (err) {
-        res.status(500).json({ error: 'Error en el servidor!' });
+        console.error('Error en la base de datos:', err);
+        res.status(500).json({ error: 'Error en el servidor!', details: err.message });
     }
 }
+
 
 module.exports = { getCategorias };

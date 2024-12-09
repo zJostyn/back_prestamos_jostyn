@@ -5,7 +5,10 @@ const pool = new Pool({
     user: 'prestamos_jostyn',
     password: 'RPaKREWkgrLVSXXx5trvvY8thR6Gn383',
     database: 'prestamos_jostyn',
-    port: '5432'
+    port: '5432',
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 async function getLibrosRevistas(req, res) {
